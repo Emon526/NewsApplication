@@ -1,5 +1,6 @@
 //Packages
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 //Screens
@@ -11,8 +12,18 @@ import 'consts/theme_data.dart';
 //Providers
 import 'provider/theme_provider.dart';
 
+// void main() {
+//   runApp(const MyApp());
+// }
+
+//Device Oriantation Lock
 void main() {
-  runApp(const MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]).then((_) {
+    runApp(const MyApp());
+  });
 }
 
 class MyApp extends StatefulWidget {
