@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:newsapp/consts/vars.dart';
-import 'package:newsapp/widgets/empty_screen.dart';
-import 'package:newsapp/widgets/verfical_spaceing.dart';
 
+import '../consts/vars.dart';
 import '../services/utils.dart';
+import '../widgets/empty_screen.dart';
+import '../widgets/verfical_spaceing.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({Key? key}) : super(key: key);
@@ -36,7 +36,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = Utils(context).getScreenSize;
+    // Size size = Utils(context).getScreenSize;
     final Color color = Utils(context).getColor;
     return SafeArea(
       child: GestureDetector(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:newsapp/services/utils.dart';
+
+import '../services/utils.dart';
 
 class EmptyNewsWidget extends StatelessWidget {
   const EmptyNewsWidget({Key? key, required this.text, required this.imagePath})

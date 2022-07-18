@@ -1,10 +1,10 @@
 //Packages
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:newsapp/inner_screens/blog_details.dart';
 import 'package:provider/provider.dart';
 
 //Screens
+import 'inner_screens/blog_details.dart';
 import 'screens/home_screen.dart';
 
 //Consts

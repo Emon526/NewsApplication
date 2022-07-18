@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:newsapp/widgets/empty_screen.dart';
 
 import '../services/utils.dart';
-import '../widgets/article_widget.dart';
+import '../widgets/empty_screen.dart';
 
 class BookMarkScreen extends StatefulWidget {
   const BookMarkScreen({Key? key}) : super(key: key);
@@ -17,7 +14,7 @@ class BookMarkScreen extends StatefulWidget {
 class _BookMarkScreenState extends State<BookMarkScreen> {
   @override
   Widget build(BuildContext context) {
-    Size size = Utils(context).getScreenSize;
+    // Size size = Utils(context).getScreenSize;
     final Color color = Utils(context).getColor;
     return Scaffold(
         appBar: AppBar(

@@ -9,7 +9,6 @@ import '../inner_screens/search_screen.dart';
 import '../services/utils.dart';
 import '../widgets/article_widget.dart';
 import '../widgets/drawer_widget.dart';
-import '../widgets/loading_widget.dart';
 import '../widgets/tabs.dart';
 import '../widgets/top_tranding.dart';
 import '../widgets/verfical_spaceing.dart';

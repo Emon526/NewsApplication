@@ -1,13 +1,12 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
-import 'package:newsapp/services/global_methods.dart';
-import 'package:newsapp/services/utils.dart';
-import 'package:newsapp/widgets/verfical_spaceing.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+
+import '../services/global_methods.dart';
+import '../services/utils.dart';
+import '../widgets/verfical_spaceing.dart';
 
 class NewsDetailsWebView extends StatefulWidget {
   const NewsDetailsWebView({Key? key}) : super(key: key);
