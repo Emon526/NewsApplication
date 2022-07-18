@@ -2,8 +2,10 @@ import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:page_transition/page_transition.dart';
 
 import '../consts/vars.dart';
+import '../inner_screens/search_screen.dart';
 import '../services/utils.dart';
 import '../widgets/article_widget.dart';
 import '../widgets/drawer_widget.dart';
@@ -45,7 +47,17 @@ class _HomeScreenState extends State<HomeScreen> {
               icon: const Icon(
                 IconlyLight.search,
               ),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  PageTransition(
+                    type: PageTransitionType.rightToLeft,
+                    child: const SearchScreen(),
+                    inheritTheme: true,
+                    ctx: context,
+                  ),
+                );
+              },
             )
           ],
         ),

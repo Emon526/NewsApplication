@@ -1,5 +1,8 @@
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
+import 'package:newsapp/inner_screens/blog_details.dart';
+import 'package:newsapp/inner_screens/news_details_webview.dart';
+import 'package:page_transition/page_transition.dart';
 
 import '../consts/vars.dart';
 import '../services/utils.dart';
@@ -16,7 +19,12 @@ class ArticleWidget extends StatelessWidget {
       child: Material(
         color: Theme.of(context).cardColor,
         child: GestureDetector(
-          onTap: () {},
+          onTap: () {
+            Navigator.pushNamed(
+              context,
+              NewsDetailsScreen.routename,
+            );
+          },
           child: Stack(
             children: [
               Container(
@@ -45,6 +53,8 @@ class ArticleWidget extends StatelessWidget {
                         height: size.height * 0.12,
                         width: size.height * 0.12,
                         boxFit: BoxFit.fill,
+                        errorWidget:
+                            Image.asset('assets/images/empty_image.png'),
                         imageUrl: 'https://picsum.photos/200',
                       ),
                     ),
@@ -75,7 +85,17 @@ class ArticleWidget extends StatelessWidget {
                           child: Row(
                             children: [
                               IconButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      PageTransition(
+                                        type: PageTransitionType.rightToLeft,
+                                        child: const NewsDetailsWebView(),
+                                        inheritTheme: true,
+                                        ctx: context,
+                                      ),
+                                    );
+                                  },
                                   icon: const Icon(
                                     Icons.link,
                                     color: Colors.blue,

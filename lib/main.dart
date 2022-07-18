@@ -1,6 +1,7 @@
 //Packages
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:newsapp/inner_screens/blog_details.dart';
 import 'package:provider/provider.dart';
 
 //Screens
@@ -63,10 +64,12 @@ class _MyAppState extends State<MyApp> {
           Consumer<ThemeProvider>(builder: (context, themeChangeProvider, ch) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
-          title: 'Blog',
+          title: 'News App',
           theme: Styles.themeData(themeChangeProvider.getDarkTheme, context),
           home: const HomeScreen(),
-          routes: {},
+          routes: {
+            NewsDetailsScreen.routename: (ctx) => const NewsDetailsScreen(),
+          },
         );
       }),
     );
