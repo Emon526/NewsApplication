@@ -1,10 +1,8 @@
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:newsapp/consts/vars.dart';
-import 'package:newsapp/services/utils.dart';
+
+import '../consts/vars.dart';
+import '../services/utils.dart';
 
 class TopTrandingWidget extends StatelessWidget {
   const TopTrandingWidget({Key? key}) : super(key: key);

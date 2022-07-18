@@ -2,14 +2,14 @@ import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:newsapp/widgets/loading_widget.dart';
-import 'package:newsapp/widgets/top_tranding.dart';
 
 import '../consts/vars.dart';
 import '../services/utils.dart';
 import '../widgets/article_widget.dart';
 import '../widgets/drawer_widget.dart';
+import '../widgets/loading_widget.dart';
 import '../widgets/tabs.dart';
+import '../widgets/top_tranding.dart';
 import '../widgets/verfical_spaceing.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -167,7 +167,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   ),
-            // LoadingWidget(),
+
             if (newsType == NewsType.allNews)
               Expanded(
                 child: ListView.builder(
