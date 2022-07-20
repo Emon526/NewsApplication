@@ -9,8 +9,15 @@ import '../services/utils.dart';
 import 'verfical_spaceing.dart';
 
 class ArticleWidget extends StatelessWidget {
-  const ArticleWidget({Key? key}) : super(key: key);
-
+  const ArticleWidget(
+      {Key? key,
+      required this.imageUrl,
+      required this.title,
+      required this.dateToShow,
+      required this.readingTime,
+      required this.url})
+      : super(key: key);
+  final String imageUrl, title, url, dateToShow, readingTime;
   @override
   Widget build(BuildContext context) {
     Size size = Utils(context).getScreenSize;
@@ -55,7 +62,7 @@ class ArticleWidget extends StatelessWidget {
                         boxFit: BoxFit.fill,
                         errorWidget:
                             Image.asset('assets/images/empty_image.png'),
-                        imageUrl: 'https://picsum.photos/200',
+                        imageUrl: imageUrl,
                       ),
                     ),
                     const SizedBox(
@@ -67,7 +74,7 @@ class ArticleWidget extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
-                          'data ' * 100,
+                          title,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                           textAlign: TextAlign.justify,
@@ -77,7 +84,7 @@ class ArticleWidget extends StatelessWidget {
                         Align(
                           alignment: Alignment.topRight,
                           child: Text(
-                            '⏱ Reading time',
+                            '⏱ $readingTime',
                             style: smallTextStyle,
                           ),
                         ),
@@ -90,7 +97,9 @@ class ArticleWidget extends StatelessWidget {
                                       context,
                                       PageTransition(
                                         type: PageTransitionType.rightToLeft,
-                                        child: const NewsDetailsWebView(),
+                                        child: NewsDetailsWebView(
+                                          url: url,
+                                        ),
                                         inheritTheme: true,
                                         ctx: context,
                                       ),
@@ -101,7 +110,7 @@ class ArticleWidget extends StatelessWidget {
                                     color: Colors.blue,
                                   )),
                               Text(
-                                '10-12-1999 ' * 2,
+                                dateToShow,
                                 maxLines: 1,
                                 style: smallTextStyle,
                               ),

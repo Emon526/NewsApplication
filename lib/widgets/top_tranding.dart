@@ -8,8 +8,14 @@ import '../inner_screens/news_details_webview.dart';
 import '../services/utils.dart';
 
 class TopTrandingWidget extends StatelessWidget {
-  const TopTrandingWidget({Key? key}) : super(key: key);
-
+  const TopTrandingWidget(
+      {Key? key,
+      required this.title,
+      required this.imageurl,
+      required this.dateToShow,
+      required this.url})
+      : super(key: key);
+  final String title, imageurl, url, dateToShow;
   @override
   Widget build(BuildContext context) {
     final size = Utils(context).getScreenSize;
@@ -36,43 +42,47 @@ class TopTrandingWidget extends StatelessWidget {
                   width: double.infinity,
                   boxFit: BoxFit.fill,
                   errorWidget: Image.asset('assets/images/empty_image.png'),
-                  imageUrl: 'https://picsum.photos/200',
+                  imageUrl: imageurl,
                 ),
               ),
-              const Padding(
-                padding: EdgeInsets.all(8.0),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  'Title',
-                  style: TextStyle(
+                  title,
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 24,
                   ),
                 ),
               ),
-              Row(
-                children: [
-                  IconButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          PageTransition(
-                            type: PageTransitionType.rightToLeft,
-                            child: const NewsDetailsWebView(),
-                            inheritTheme: true,
-                            ctx: context,
-                          ),
-                        );
-                      },
-                      icon: Icon(
-                        Icons.link,
-                        color: color,
-                      )),
-                  const Spacer(),
-                  SelectableText(
-                    '10-12-1999',
-                    style: smallTextStyle,
-                  ),
-                ],
+              Flexible(
+                child: Row(
+                  children: [
+                    IconButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            PageTransition(
+                              type: PageTransitionType.rightToLeft,
+                              child: NewsDetailsWebView(
+                                url: url,
+                              ),
+                              inheritTheme: true,
+                              ctx: context,
+                            ),
+                          );
+                        },
+                        icon: Icon(
+                          Icons.link,
+                          color: color,
+                        )),
+                    const Spacer(),
+                    SelectableText(
+                      dateToShow,
+                      style: smallTextStyle,
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
