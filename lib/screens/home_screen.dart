@@ -191,8 +191,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
 
             FutureBuilder<List<NewsModel>>(
-                future: newsProvider.fatchAllNews(
-                    pageIndex: currentPageIndex + 1, sortBy: sortBy),
+                future: newsType == NewsType.topTrending
+                    ? newsProvider.fatchTopHeadlines()
+                    : newsProvider.fatchAllNews(
+                        pageIndex: currentPageIndex + 1, sortBy: sortBy),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return newsType == NewsType.allNews
@@ -240,11 +242,14 @@ class _HomeScreenState extends State<HomeScreen> {
                             viewportFraction: 0.9,
                             itemCount: 5,
                             itemBuilder: (context, index) {
-                              return TopTrandingWidget(
-                                dateToShow: snapshot.data![index].dateToShow,
-                                imageurl: snapshot.data![index].utlToImage,
-                                title: snapshot.data![index].title,
-                                url: snapshot.data![index].url,
+                              return ChangeNotifierProvider.value(
+                                value: snapshot.data![index],
+                                child: const TopTrandingWidget(
+                                    // dateToShow: snapshot.data![index].dateToShow,
+                                    // imageurl: snapshot.data![index].utlToImage,
+                                    // title: snapshot.data![index].title,
+                                    // url: snapshot.data![index].url,
+                                    ),
                               );
                             },
                           ),
