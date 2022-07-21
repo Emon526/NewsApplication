@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 
 import '../consts/vars.dart';
 import '../inner_screens/search_screen.dart';
 import '../models/news_model.dart';
-import '../services/news_api.dart';
+import '../provider/news_provider.dart';
 import '../services/utils.dart';
 import '../widgets/article_widget.dart';
 import '../widgets/drawer_widget.dart';
@@ -31,6 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final newsProvider = Provider.of<NewsProvider>(context);
     Size size = Utils(context).getScreenSize;
     final Color color = Utils(context).getColor;
     return SafeArea(
@@ -179,13 +181,18 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: DropdownButton(
                             value: sortBy,
                             items: dropDownitems,
-                            onChanged: (String? value) {}),
+                            onChanged: (String? value) {
+                              setState(() {
+                                sortBy = value!;
+                              });
+                            }),
                       ),
                     ),
                   ),
 
             FutureBuilder<List<NewsModel>>(
-                future: NewsApiServices.getAllNews(),
+                future: newsProvider.fatchAllNews(
+                    pageIndex: currentPageIndex + 1, sortBy: sortBy),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return newsType == NewsType.allNews
@@ -209,13 +216,16 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: ListView.builder(
                             itemCount: snapshot.data!.length,
                             itemBuilder: (ctx, index) {
-                              return ArticleWidget(
-                                imageUrl: snapshot.data![index].utlToImage,
-                                title: snapshot.data![index].title,
-                                dateToShow: snapshot.data![index].dateToShow,
-                                readingTime:
-                                    snapshot.data![index].readingTimeText,
-                                url: snapshot.data![index].url,
+                              return ChangeNotifierProvider.value(
+                                value: snapshot.data![index],
+                                child: const ArticleWidget(
+                                    // imageUrl: snapshot.data![index].utlToImage,
+                                    // title: snapshot.data![index].title,
+                                    // dateToShow: snapshot.data![index].dateToShow,
+                                    // readingTime:
+                                    //     snapshot.data![index].readingTimeText,
+                                    // url: snapshot.data![index].url,
+                                    ),
                               );
                             },
                           ),

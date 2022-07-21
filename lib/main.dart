@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 //Screens
 import 'inner_screens/blog_details.dart';
+import 'provider/news_provider.dart';
 import 'screens/home_screen.dart';
 
 //Consts
@@ -58,6 +59,9 @@ class _MyAppState extends State<MyApp> {
           //Notify about theme changes
           return themeChangeProvider;
         }),
+        ChangeNotifierProvider(
+          create: (_) => NewsProvider(),
+        ),
       ],
       child:
           //Notify about theme changes

@@ -38,14 +38,14 @@ class HttpExceptions implements Exception {
   }
 
 // for showing the error details message
-  @override
-  String toString() {
-    return getnewsApiErrorMessage;
-  }
-
-//for showing the error message
   // @override
   // String toString() {
-  //   return codeMessage;
+  //   return getnewsApiErrorMessage;
   // }
+
+//for showing the error message
+  @override
+  String toString() {
+    return codeMessage;
+  }
 }
