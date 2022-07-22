@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 //Screens
 import 'inner_screens/blog_details.dart';
+import 'provider/bookmark_provider.dart';
 import 'provider/news_provider.dart';
 import 'screens/home_screen.dart';
 
@@ -61,6 +62,9 @@ class _MyAppState extends State<MyApp> {
         }),
         ChangeNotifierProvider(
           create: (_) => NewsProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => BookMarkProvider(),
         ),
       ],
       child:

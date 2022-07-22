@@ -38,7 +38,7 @@ class TopTrandingWidget extends StatelessWidget {
                   width: double.infinity,
                   boxFit: BoxFit.fill,
                   errorWidget: Image.asset('assets/images/empty_image.png'),
-                  imageUrl: newsModelProvider.utlToImage,
+                  imageUrl: newsModelProvider.urlToImage,
                 ),
               ),
               Padding(

@@ -1,5 +1,6 @@
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
+import 'package:newsapp/models/bookmark_model.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
@@ -11,12 +12,15 @@ import '../services/utils.dart';
 import 'verfical_spaceing.dart';
 
 class ArticleWidget extends StatelessWidget {
-  const ArticleWidget({Key? key}) : super(key: key);
+  const ArticleWidget({Key? key, this.isBookmark = false}) : super(key: key);
   // final String imageUrl, title, url, dateToShow, readingTime;
+  final bool isBookmark;
   @override
   Widget build(BuildContext context) {
     Size size = Utils(context).getScreenSize;
-    final newsModelProvider = Provider.of<NewsModel>(context);
+    dynamic newsModelProvider = isBookmark
+        ? Provider.of<BookMarkModel>(context)
+        : Provider.of<NewsModel>(context);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Material(
@@ -61,7 +65,7 @@ class ArticleWidget extends StatelessWidget {
                           boxFit: BoxFit.fill,
                           errorWidget:
                               Image.asset('assets/images/empty_image.png'),
-                          imageUrl: newsModelProvider.utlToImage,
+                          imageUrl: newsModelProvider.urlToImage,
                         ),
                       ),
                     ),

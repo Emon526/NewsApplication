@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 
 import '../consts/api_const.dart';
 import '../consts/http_exceptions.dart';
+import '../models/bookmark_model.dart';
 import '../models/news_model.dart';
 
 class NewsApiServices {
@@ -84,6 +85,31 @@ class NewsApiServices {
       return NewsModel.newsFromSnapshot(newsTemplist);
     } catch (error) {
       throw error.toString();
+    }
+  }
+
+  static Future<List<BookMarkModel>?> getBookmarks() async {
+    try {
+      var uri = Uri.https(BASEURL_FIREBASE, "bookmarks.json");
+      var response = await http.get(
+        uri,
+      );
+      // log('Response status: ${response.statusCode}');
+      // log('Response body: ${response.body}');
+      Map data = jsonDecode(response.body);
+      List allKeys = [];
+      if (data['code'] != null) {
+        throw HttpExceptions(data['code']);
+        // for showing using status code
+        // throw HttpExceptions(response.statusCode.toString());
+      }
+      for (String key in data.keys) {
+        allKeys.add(key);
+      }
+      log("allkeys = $allKeys");
+      return BookMarkModel.bookmarksFromSnapshot(json: data, allKeys: allKeys);
+    } catch (error) {
+      rethrow;
     }
   }
 }

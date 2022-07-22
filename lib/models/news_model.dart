@@ -10,7 +10,7 @@ class NewsModel with ChangeNotifier {
       title,
       description,
       url,
-      utlToImage,
+      urlToImage,
       publishedAt,
       dateToShow,
       content,
@@ -22,7 +22,7 @@ class NewsModel with ChangeNotifier {
     required this.title,
     required this.description,
     required this.url,
-    required this.utlToImage,
+    required this.urlToImage,
     required this.publishedAt,
     required this.content,
     required this.dateToShow,
@@ -38,17 +38,19 @@ class NewsModel with ChangeNotifier {
       dateToShow = GlobalMethods.formattedDateText(json["publishedAt"]);
     }
     return NewsModel(
-        newsId: json["source"]["id"] ?? "",
-        sourceName: json["source"]["name"] ?? "",
-        authorName: json["author"] ?? "",
-        title: title,
-        description: description,
-        url: json["url"] ?? "",
-        utlToImage: json["urlToImage"] ?? "",
-        publishedAt: json["publishedAt"] ?? "",
-        content: content,
-        dateToShow: dateToShow,
-        readingTimeText: readingTime(title + description + content).msg);
+      newsId: json["source"]["id"] ?? "",
+      sourceName: json["source"]["name"] ?? "",
+      authorName: json["author"] ?? "",
+      title: title,
+      description: description,
+      url: json["url"] ?? "",
+      urlToImage: json["urlToImage"] ??
+          "https://techcrunch.com/wp-content/uploads/2022/01/locket-app.jpg?w=1390&crop=1",
+      publishedAt: json["publishedAt"] ?? "",
+      content: content,
+      dateToShow: dateToShow,
+      readingTimeText: readingTime(title + description + content).msg,
+    );
   }
   static List<NewsModel> newsFromSnapshot(List newSnapshot) {
     return newSnapshot.map((jsondata) {
@@ -58,13 +60,13 @@ class NewsModel with ChangeNotifier {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {};
-    data["NewsId"] = newsId;
+    data["newsId"] = newsId;
     data["sourceName"] = sourceName;
     data["authorName"] = authorName;
     data["title"] = title;
     data["description"] = description;
     data["url"] = url;
-    data["utlToImage"] = utlToImage;
+    data["urlToImage"] = urlToImage;
     data["publishedAt"] = publishedAt;
     data["dateToShow"] = dateToShow;
     data["content"] = content;

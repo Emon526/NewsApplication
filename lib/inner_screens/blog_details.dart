@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../consts/styles.dart';
+import '../provider/bookmark_provider.dart';
 import '../provider/news_provider.dart';
 import '../services/global_methods.dart';
 import '../services/utils.dart';
@@ -20,10 +21,12 @@ class NewsDetailsScreen extends StatefulWidget {
 }
 
 class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
+  final bool isInBookMark = false;
   @override
   Widget build(BuildContext context) {
     final Color color = Utils(context).getColor;
     final newsProvider = Provider.of<NewsProvider>(context);
+    final bookMarkProvider = Provider.of<BookMarkProvider>(context);
     final publishedAt = ModalRoute.of(context)!.settings.arguments as String;
     final currentNews = newsProvider.findByDate(publishedAt: publishedAt);
     return Scaffold(
@@ -81,7 +84,7 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                     child: FancyShimmerImage(
                       boxFit: BoxFit.fill,
                       errorWidget: Image.asset('assets/images/empty_image.png'),
-                      imageUrl: currentNews.utlToImage,
+                      imageUrl: currentNews.urlToImage,
                     ),
                   ),
                 ),
@@ -117,7 +120,17 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                         ),
                       ),
                       GestureDetector(
-                        onTap: () {},
+                        onTap: () async {
+                          if (isInBookMark) {
+                            await bookMarkProvider.deleteBookmark();
+                          } else {
+                            await bookMarkProvider.addToBookmark(
+                                newsModel: currentNews);
+                          }
+                          // await bookMarkProvider.addToBookmark(
+                          //     newsModel: currentNews);
+                          // await bookMarkProvider.addToBookMark();
+                        },
                         child: Card(
                           elevation: 10,
                           shape: const CircleBorder(),
