@@ -15,6 +15,7 @@ class NewsModel with ChangeNotifier {
       dateToShow,
       content,
       readingTimeText;
+
   NewsModel({
     required this.newsId,
     required this.sourceName,
@@ -28,6 +29,7 @@ class NewsModel with ChangeNotifier {
     required this.dateToShow,
     required this.readingTimeText,
   });
+
   factory NewsModel.fromJson(dynamic json) {
     String title = json["title"] ?? "";
     String content = json["content"] ?? "";
@@ -52,9 +54,10 @@ class NewsModel with ChangeNotifier {
       readingTimeText: readingTime(title + description + content).msg,
     );
   }
+
   static List<NewsModel> newsFromSnapshot(List newSnapshot) {
-    return newSnapshot.map((jsondata) {
-      return NewsModel.fromJson(jsondata);
+    return newSnapshot.map((json) {
+      return NewsModel.fromJson(json);
     }).toList();
   }
 
@@ -73,8 +76,9 @@ class NewsModel with ChangeNotifier {
     data["readingTimeText"] = readingTimeText;
     return data;
   }
-  //   @override
+
+  // @override
   // String toString() {
-  //   return "news {newsId:$newsId}";
+  //   return "news {newid: $newsId}";
   // }
 }

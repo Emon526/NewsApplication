@@ -6,12 +6,12 @@ class TabsWidget extends StatelessWidget {
       required this.text,
       required this.color,
       required this.function,
-      required this.fontsize})
+      required this.fontSize})
       : super(key: key);
   final String text;
   final Color color;
   final Function function;
-  final double fontsize;
+  final double fontSize;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -20,15 +20,13 @@ class TabsWidget extends StatelessWidget {
       },
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
-          color: color,
-        ),
+            borderRadius: BorderRadius.circular(15), color: color),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text(
             text,
             style: TextStyle(
-              fontSize: fontsize,
+              fontSize: fontSize,
               fontWeight: FontWeight.w600,
             ),
           ),

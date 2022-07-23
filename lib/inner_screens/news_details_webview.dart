@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:share_plus/share_plus.dart';
@@ -6,7 +7,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 import '../services/global_methods.dart';
 import '../services/utils.dart';
-import '../widgets/verfical_spaceing.dart';
+import '../widgets/vertical_spacing.dart';
 
 class NewsDetailsWebView extends StatefulWidget {
   const NewsDetailsWebView({Key? key, required this.url}) : super(key: key);
@@ -19,29 +20,27 @@ class NewsDetailsWebView extends StatefulWidget {
 class _NewsDetailsWebViewState extends State<NewsDetailsWebView> {
   late WebViewController _webViewController;
   double _progress = 0.0;
-
   @override
   Widget build(BuildContext context) {
     final Color color = Utils(context).getColor;
-
-    return SafeArea(
-      child: WillPopScope(
-        onWillPop: () async {
-          if (await _webViewController.canGoBack()) {
-            _webViewController.goBack();
-            //stay inside
-            return false;
-          } else {
-            return true;
-          }
-        },
-        child: Scaffold(
-          appBar: AppBar(
+    return WillPopScope(
+      onWillPop: () async {
+        if (await _webViewController.canGoBack()) {
+          _webViewController.goBack();
+          // stay inside
+          return false;
+        } else {
+          return true;
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
             leading: IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: const Icon(IconlyLight.arrowLeft2)),
+              icon: const Icon(IconlyLight.arrowLeft2),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
             iconTheme: IconThemeData(color: color),
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             elevation: 0,
@@ -52,41 +51,42 @@ class _NewsDetailsWebViewState extends State<NewsDetailsWebView> {
             ),
             actions: [
               IconButton(
-                  onPressed: () async {
-                    await _showModelSheetfct();
-                  },
-                  icon: const Icon(Icons.more_horiz))
-            ],
-          ),
-          body: Column(
-            children: [
-              LinearProgressIndicator(
-                value: _progress,
-                color: _progress == 1.0 ? Colors.transparent : Colors.blue,
-                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-              ),
-              Expanded(
-                child: WebView(
-                  initialUrl: widget.url,
-                  zoomEnabled: true,
-                  onProgress: (progress) {
-                    setState(() {
-                      _progress = progress / 100;
-                    });
-                  },
-                  onWebViewCreated: (controller) {
-                    _webViewController = controller;
-                  },
+                onPressed: () async {
+                  await _showModalSheetFct();
+                },
+                icon: const Icon(
+                  Icons.more_horiz,
                 ),
               ),
-            ],
-          ),
+            ]),
+        body: Column(
+          children: [
+            LinearProgressIndicator(
+              value: _progress,
+              color: _progress == 1.0 ? Colors.transparent : Colors.blue,
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            ),
+            Expanded(
+              child: WebView(
+                initialUrl: widget.url,
+                zoomEnabled: true,
+                onProgress: (progress) {
+                  setState(() {
+                    _progress = progress / 100;
+                  });
+                },
+                onWebViewCreated: (controller) {
+                  _webViewController = controller;
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
 
-  Future<void> _showModelSheetfct() async {
+  Future<void> _showModalSheetFct() async {
     await showModalBottomSheet(
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
@@ -105,31 +105,30 @@ class _NewsDetailsWebViewState extends State<NewsDetailsWebView> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const VerticalSpace(20),
+                const VerticalSpacing(20),
                 Center(
                   child: Container(
+                    height: 5,
+                    width: 35,
                     decoration: BoxDecoration(
                       color: Colors.grey,
                       borderRadius: BorderRadius.circular(30),
                     ),
-                    height: 5,
-                    width: 35,
                   ),
                 ),
-                const VerticalSpace(20),
+                const VerticalSpacing(20),
                 const Text(
-                  'More Option',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 20,
-                  ),
+                  'More option',
+                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
                 ),
-                const VerticalSpace(20),
+                const VerticalSpacing(20),
                 const Divider(
                   thickness: 2,
                 ),
-                const VerticalSpace(20),
+                const VerticalSpacing(20),
                 ListTile(
+                  leading: const Icon(Icons.share),
+                  title: const Text('Share'),
                   onTap: () async {
                     try {
                       await Share.share(widget.url,
@@ -139,39 +138,32 @@ class _NewsDetailsWebViewState extends State<NewsDetailsWebView> {
                           errorMessage: err.toString(), context: context);
                     }
                   },
-                  leading: const Icon(Icons.share),
-                  title: const Text('Share'),
                 ),
                 ListTile(
-                  onTap: () {
-                    _launchUrl();
-                  },
                   leading: const Icon(Icons.open_in_browser),
                   title: const Text('Open in browser'),
+                  onTap: () async {
+                    if (!await launchUrl(Uri.parse(widget.url))) {
+                      throw 'Could not launch ${widget.url}}';
+                    }
+                  },
                 ),
                 ListTile(
+                  leading: const Icon(Icons.refresh),
+                  title: const Text('Refresh'),
                   onTap: () async {
                     try {
                       await _webViewController.reload();
                     } catch (err) {
-                      GlobalMethods.errorDialog(
-                          errorMessage: err.toString(), context: context);
+                      log("error occured $err");
                     } finally {
                       Navigator.pop(context);
                     }
                   },
-                  leading: const Icon(Icons.refresh),
-                  title: const Text('Refresh'),
                 ),
               ],
             ),
           );
         });
-  }
-
-  Future<void> _launchUrl() async {
-    if (!await launchUrl(Uri.parse(widget.url))) {
-      throw 'Could not launch $widget.url';
-    }
   }
 }

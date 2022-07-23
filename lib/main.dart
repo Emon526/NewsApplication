@@ -1,32 +1,21 @@
 //Packages
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 //Screens
 import 'inner_screens/blog_details.dart';
-import 'provider/bookmark_provider.dart';
-import 'provider/news_provider.dart';
+import 'providers/bookmarks_provider.dart';
+import 'providers/news_provider.dart';
 import 'screens/home_screen.dart';
 
 //Consts
 import 'consts/theme_data.dart';
 
 //Providers
-import 'provider/theme_provider.dart';
+import 'providers/theme_provider.dart';
 
-// void main() {
-//   runApp(const MyApp());
-// }
-
-//Device Oriantation Lock
 void main() {
-  WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-  ]).then((_) {
-    runApp(const MyApp());
-  });
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
@@ -64,7 +53,7 @@ class _MyAppState extends State<MyApp> {
           create: (_) => NewsProvider(),
         ),
         ChangeNotifierProvider(
-          create: (_) => BookMarkProvider(),
+          create: (_) => BookmarksProvider(),
         ),
       ],
       child:
@@ -72,11 +61,11 @@ class _MyAppState extends State<MyApp> {
           Consumer<ThemeProvider>(builder: (context, themeChangeProvider, ch) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
-          title: 'News App',
+          title: 'News App - Flutter&API Course',
           theme: Styles.themeData(themeChangeProvider.getDarkTheme, context),
           home: const HomeScreen(),
           routes: {
-            NewsDetailsScreen.routename: (ctx) => const NewsDetailsScreen(),
+            NewsDetailsScreen.routeName: (ctx) => const NewsDetailsScreen(),
           },
         );
       }),

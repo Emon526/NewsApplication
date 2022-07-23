@@ -27,10 +27,7 @@ class EmptyNewsWidget extends StatelessWidget {
               text,
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: color,
-                fontSize: 30,
-                fontWeight: FontWeight.w700,
-              ),
+                  color: color, fontSize: 30, fontWeight: FontWeight.w700),
             ),
           ),
         ],

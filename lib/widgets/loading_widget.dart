@@ -5,9 +5,9 @@ import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../consts/vars.dart';
-import '../provider/bookmark_provider.dart';
+import '../providers/bookmarks_provider.dart';
 import '../services/utils.dart';
-import 'verfical_spaceing.dart';
+import 'vertical_spacing.dart';
 
 class LoadingWidget extends StatefulWidget {
   const LoadingWidget({Key? key, required this.newsType}) : super(key: key);
@@ -18,15 +18,15 @@ class LoadingWidget extends StatefulWidget {
 
 class _LoadingWidgetState extends State<LoadingWidget> {
   BorderRadius borderRadius = BorderRadius.circular(18);
-
   late Color baseShimmerColor, highlightShimmerColor, widgetShimmerColor;
+
   @override
   void didChangeDependencies() {
     var utils = Utils(context);
     baseShimmerColor = utils.baseShimmerColor;
     highlightShimmerColor = utils.highlightShimmerColor;
     widgetShimmerColor = utils.widgetShimmerColor;
-    Provider.of<BookMarkProvider>(context, listen: false).fatchBookmarks();
+    Provider.of<BookmarksProvider>(context, listen: false).fetchBookmarks();
     super.didChangeDependencies();
   }
 
@@ -42,32 +42,34 @@ class _LoadingWidgetState extends State<LoadingWidget> {
             viewportFraction: 0.9,
             itemCount: 5,
             itemBuilder: (context, index) {
-              return TopTrandingLoadingWidget(
+              return TopTrendingLoadingWidget(
                   baseShimmerColor: baseShimmerColor,
                   highlightShimmerColor: highlightShimmerColor,
                   size: size,
                   widgetShimmerColor: widgetShimmerColor,
                   borderRadius: borderRadius);
-            })
+            },
+          )
         : Expanded(
             child: ListView.builder(
+                // you can add these 2 lines for better performance
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: 20,
                 itemBuilder: (ctx, index) {
-                  return ArticleShimmerEffect(
+                  return ArticlesShimmerEffectWidget(
                       baseShimmerColor: baseShimmerColor,
                       highlightShimmerColor: highlightShimmerColor,
-                      size: size,
                       widgetShimmerColor: widgetShimmerColor,
+                      size: size,
                       borderRadius: borderRadius);
                 }),
           );
   }
 }
 
-class TopTrandingLoadingWidget extends StatelessWidget {
-  const TopTrandingLoadingWidget({
+class TopTrendingLoadingWidget extends StatelessWidget {
+  const TopTrendingLoadingWidget({
     Key? key,
     required this.baseShimmerColor,
     required this.highlightShimmerColor,
@@ -87,16 +89,19 @@ class TopTrandingLoadingWidget extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(12.0),
       child: Container(
+        // height: size.height * 0.45,
         decoration: BoxDecoration(
-            color: Theme.of(context).cardColor,
-            borderRadius: BorderRadius.circular(12.0)),
+          color: Theme.of(context).cardColor,
+          borderRadius: BorderRadius.circular(12.0),
+        ),
         child: Shimmer.fromColors(
           baseColor: baseShimmerColor,
           highlightColor: highlightShimmerColor,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            // mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              //Image
+              // Image
               ClipRRect(
                 borderRadius: BorderRadius.circular(12),
                 child: Container(
@@ -105,41 +110,27 @@ class TopTrandingLoadingWidget extends StatelessWidget {
                   color: widgetShimmerColor,
                 ),
               ),
-              const SizedBox(
-                width: 30,
-              ),
-              //Title
+              // Title
               Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  height: size.height * 0.06,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                      borderRadius: borderRadius, color: widgetShimmerColor),
-                ),
-              ),
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    width: double.infinity,
+                    height: size.height * 0.06,
+                    decoration: BoxDecoration(
+                      borderRadius: borderRadius,
+                      color: widgetShimmerColor,
+                    ),
+                  )),
+              // Date
               Align(
                 alignment: Alignment.bottomRight,
                 child: Padding(
-                  padding: const EdgeInsets.all(6.0),
+                  padding: const EdgeInsets.all(16.0),
                   child: Container(
                     height: size.height * 0.025,
                     width: size.width * 0.4,
                     decoration: BoxDecoration(
                       borderRadius: borderRadius,
-                      color: widgetShimmerColor,
-                    ),
-                  ),
-                ),
-              ),
-              Align(
-                alignment: Alignment.topLeft,
-                child: Padding(
-                  padding: const EdgeInsets.all(6.0),
-                  child: ClipOval(
-                    child: Container(
-                      height: 25,
-                      width: 25,
                       color: widgetShimmerColor,
                     ),
                   ),
@@ -153,20 +144,20 @@ class TopTrandingLoadingWidget extends StatelessWidget {
   }
 }
 
-class ArticleShimmerEffect extends StatelessWidget {
-  const ArticleShimmerEffect({
+class ArticlesShimmerEffectWidget extends StatelessWidget {
+  const ArticlesShimmerEffectWidget({
     Key? key,
     required this.baseShimmerColor,
     required this.highlightShimmerColor,
-    required this.size,
     required this.widgetShimmerColor,
+    required this.size,
     required this.borderRadius,
   }) : super(key: key);
 
   final Color baseShimmerColor;
   final Color highlightShimmerColor;
-  final Size size;
   final Color widgetShimmerColor;
+  final Size size;
   final BorderRadius borderRadius;
 
   @override
@@ -203,60 +194,66 @@ class ArticleShimmerEffect extends StatelessWidget {
                     ClipRRect(
                       borderRadius: BorderRadius.circular(10),
                       child: Container(
+                        color: widgetShimmerColor,
                         height: size.height * 0.12,
                         width: size.height * 0.12,
-                        color: widgetShimmerColor,
                       ),
                     ),
                     const SizedBox(
-                      width: 30,
+                      width: 10,
                     ),
                     Expanded(
-                        child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Container(
-                          height: size.height * 0.06,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                              borderRadius: borderRadius, color: Colors.red),
-                        ),
-                        const VerticalSpace(5),
-                        Align(
-                          alignment: Alignment.topRight,
-                          child: Container(
-                            height: size.height * 0.025,
-                            width: size.width * 0.4,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Container(
+                            height: size.height * 0.06,
+                            width: double.infinity,
                             decoration: BoxDecoration(
                               borderRadius: borderRadius,
                               color: widgetShimmerColor,
                             ),
                           ),
-                        ),
-                        FittedBox(
-                          child: Row(
-                            children: [
-                              ClipOval(
-                                child: Container(
-                                  height: 25,
-                                  width: 25,
-                                  color: widgetShimmerColor,
-                                ),
+                          const VerticalSpacing(5),
+                          Align(
+                            alignment: Alignment.topRight,
+                            child: Container(
+                              height: size.height * 0.025,
+                              width: size.width * 0.4,
+                              decoration: BoxDecoration(
+                                borderRadius: borderRadius,
+                                color: widgetShimmerColor,
                               ),
-                              const SizedBox(width: 5),
-                              Container(
-                                height: size.height * 0.025,
-                                width: size.width * 0.4,
-                                decoration: BoxDecoration(
-                                    borderRadius: borderRadius,
-                                    color: widgetShimmerColor),
-                              ),
-                            ],
+                            ),
                           ),
-                        )
-                      ],
-                    ))
+                          FittedBox(
+                            child: Row(
+                              children: [
+                                ClipOval(
+                                  child: Container(
+                                    height: 25,
+                                    width: 25,
+                                    color: widgetShimmerColor,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                                Container(
+                                  height: size.height * 0.025,
+                                  width: size.width * 0.4,
+                                  decoration: BoxDecoration(
+                                    borderRadius: borderRadius,
+                                    color: widgetShimmerColor,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    )
                   ],
                 ),
               ),

@@ -1,22 +1,25 @@
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
+
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
 import '../consts/vars.dart';
 import '../inner_screens/search_screen.dart';
 import '../models/news_model.dart';
-import '../provider/news_provider.dart';
+import '../providers/news_provider.dart';
+
 import '../services/utils.dart';
-import '../widgets/article_widget.dart';
+import '../widgets/articles_widget.dart';
 import '../widgets/drawer_widget.dart';
 import '../widgets/empty_screen.dart';
 import '../widgets/loading_widget.dart';
 import '../widgets/tabs.dart';
-import '../widgets/top_tranding.dart';
-import '../widgets/verfical_spaceing.dart';
+import '../widgets/top_tending.dart';
+import '../widgets/vertical_spacing.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -32,38 +35,38 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final newsProvider = Provider.of<NewsProvider>(context);
     Size size = Utils(context).getScreenSize;
     final Color color = Utils(context).getColor;
+    final newsProvider = Provider.of<NewsProvider>(context);
     return SafeArea(
       child: Scaffold(
+        resizeToAvoidBottomInset: true,
         appBar: AppBar(
           iconTheme: IconThemeData(color: color),
           elevation: 0,
-          centerTitle: true,
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          centerTitle: true,
           title: Text(
-            'News App',
+            'News app',
             style: GoogleFonts.lobster(
                 textStyle:
                     TextStyle(color: color, fontSize: 20, letterSpacing: 0.6)),
           ),
           actions: [
             IconButton(
-              icon: const Icon(
-                IconlyLight.search,
-              ),
               onPressed: () {
                 Navigator.push(
                   context,
                   PageTransition(
-                    type: PageTransitionType.rightToLeft,
-                    child: const SearchScreen(),
-                    inheritTheme: true,
-                    ctx: context,
-                  ),
+                      type: PageTransitionType.rightToLeft,
+                      child: const SearchScreen(),
+                      inheritTheme: true,
+                      ctx: context),
                 );
               },
+              icon: const Icon(
+                IconlyLight.search,
+              ),
             )
           ],
         ),
@@ -86,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       newsType = NewsType.allNews;
                     });
                   },
-                  fontsize: newsType == NewsType.allNews ? 22 : 14,
+                  fontSize: newsType == NewsType.allNews ? 22 : 14,
                 ),
                 const SizedBox(
                   width: 25,
@@ -104,11 +107,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       newsType = NewsType.topTrending;
                     });
                   },
-                  fontsize: newsType == NewsType.topTrending ? 22 : 14,
+                  fontSize: newsType == NewsType.topTrending ? 22 : 14,
                 ),
               ],
             ),
-            const VerticalSpace(10),
+            const VerticalSpacing(10),
             newsType == NewsType.topTrending
                 ? Container()
                 : SizedBox(
@@ -116,8 +119,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        paginationButton(
-                          text: 'Prev',
+                        paginationButtons(
+                          text: "Prev",
                           function: () {
                             if (currentPageIndex == 0) {
                               return;
@@ -155,8 +158,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 );
                               })),
                         ),
-                        paginationButton(
-                          text: 'Next',
+                        paginationButtons(
+                          text: "Next",
                           function: () {
                             if (currentPageIndex == 4) {
                               return;
@@ -164,12 +167,13 @@ class _HomeScreenState extends State<HomeScreen> {
                             setState(() {
                               currentPageIndex += 1;
                             });
+                            // print('$currentPageIndex index');
                           },
                         ),
                       ],
                     ),
                   ),
-            const VerticalSpace(10),
+            const VerticalSpacing(10),
             newsType == NewsType.topTrending
                 ? Container()
                 : Align(
@@ -180,7 +184,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         child: DropdownButton(
                             value: sortBy,
-                            items: dropDownitems,
+                            items: dropDownItems,
                             onChanged: (String? value) {
                               setState(() {
                                 sortBy = value!;
@@ -189,48 +193,50 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   ),
-
             FutureBuilder<List<NewsModel>>(
                 future: newsType == NewsType.topTrending
-                    ? newsProvider.fatchTopHeadlines()
-                    : newsProvider.fatchAllNews(
+                    ? newsProvider.fetchTopHeadlines()
+                    : newsProvider.fetchAllNews(
                         pageIndex: currentPageIndex + 1, sortBy: sortBy),
-                builder: (context, snapshot) {
+                builder: ((context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return newsType == NewsType.allNews
                         ? LoadingWidget(newsType: newsType)
-                        : Expanded(child: LoadingWidget(newsType: newsType));
+                        : Expanded(
+                            child: LoadingWidget(newsType: newsType),
+                          );
                   } else if (snapshot.hasError) {
                     return Expanded(
                       child: EmptyNewsWidget(
-                          text: "an error occured ${snapshot.error}",
-                          imagePath: "assets/images/no_news.png"),
+                        text: "an error occured ${snapshot.error}",
+                        imagePath: 'assets/images/no_news.png',
+                      ),
                     );
                   } else if (snapshot.data == null) {
                     return const Expanded(
                       child: EmptyNewsWidget(
-                          text: "No news found",
-                          imagePath: "assets/images/no_news.png"),
+                        text: "No news found",
+                        imagePath: 'assets/images/no_news.png',
+                      ),
                     );
                   }
                   return newsType == NewsType.allNews
                       ? Expanded(
                           child: ListView.builder(
-                            itemCount: snapshot.data!.length,
-                            itemBuilder: (ctx, index) {
-                              return ChangeNotifierProvider.value(
-                                value: snapshot.data![index],
-                                child: const ArticleWidget(
-                                    // imageUrl: snapshot.data![index].utlToImage,
-                                    // title: snapshot.data![index].title,
-                                    // dateToShow: snapshot.data![index].dateToShow,
-                                    // readingTime:
-                                    //     snapshot.data![index].readingTimeText,
-                                    // url: snapshot.data![index].url,
-                                    ),
-                              );
-                            },
-                          ),
+                              itemCount: snapshot.data!.length,
+                              itemBuilder: (ctx, index) {
+                                return ChangeNotifierProvider.value(
+                                  value: snapshot.data![index],
+                                  child: const ArticlesWidget(
+                                      // imageUrl: snapshot.data![index].,
+                                      // dateToShow: snapshot.data![index].dateToShow,
+                                      // readingTime:
+                                      //     snapshot.data![index].readingTimeText,
+                                      // title: snapshot.data![index].title,
+                                      // url: snapshot.data![index].url,
+                                      ),
+                                );
+                              }),
                         )
                       : SizedBox(
                           height: size.height * 0.6,
@@ -244,61 +250,50 @@ class _HomeScreenState extends State<HomeScreen> {
                             itemBuilder: (context, index) {
                               return ChangeNotifierProvider.value(
                                 value: snapshot.data![index],
-                                child: const TopTrandingWidget(
-                                    // dateToShow: snapshot.data![index].dateToShow,
-                                    // imageurl: snapshot.data![index].utlToImage,
-                                    // title: snapshot.data![index].title,
+                                child: const TopTrendingWidget(
                                     // url: snapshot.data![index].url,
                                     ),
                               );
                             },
                           ),
                         );
-                }),
-
-            // LoadingWidget(
-            //   newsType: newsType,
-            // )
+                })),
+            //  LoadingWidget(newsType: newsType),
           ]),
         ),
       ),
     );
   }
 
-  List<DropdownMenuItem<String>> get dropDownitems {
+  List<DropdownMenuItem<String>> get dropDownItems {
     List<DropdownMenuItem<String>> menuItem = [
       DropdownMenuItem(
-          value: SortByEnum.relevancy.name,
-          child: Text(
-            SortByEnum.relevancy.name,
-          )),
+        value: SortByEnum.relevancy.name,
+        child: Text(SortByEnum.relevancy.name),
+      ),
       DropdownMenuItem(
-          value: SortByEnum.publishedAt.name,
-          child: Text(
-            SortByEnum.publishedAt.name,
-          )),
+        value: SortByEnum.publishedAt.name,
+        child: Text(SortByEnum.publishedAt.name),
+      ),
       DropdownMenuItem(
-          value: SortByEnum.popularity.name,
-          child: Text(
-            SortByEnum.popularity.name,
-          )),
+        value: SortByEnum.popularity.name,
+        child: Text(SortByEnum.popularity.name),
+      ),
     ];
     return menuItem;
   }
 
-  Widget paginationButton({required Function function, required String text}) {
+  Widget paginationButtons({required Function function, required String text}) {
     return ElevatedButton(
       onPressed: () {
         function();
       },
+      child: Text(text),
       style: ElevatedButton.styleFrom(
           primary: Colors.blue,
-          padding: const EdgeInsets.all(6),
+          padding: EdgeInsets.all(6),
           textStyle:
               const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-      child: Text(
-        text,
-      ),
     );
   }
 }

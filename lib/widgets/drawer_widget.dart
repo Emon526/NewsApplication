@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
+
 import '../inner_screens/bookmarks_screen.dart';
-import '../provider/theme_provider.dart';
+import '../providers/theme_provider.dart';
 import '../screens/home_screen.dart';
-import 'verfical_spaceing.dart';
+import 'vertical_spacing.dart';
 
 class DrawerWidget extends StatefulWidget {
   const DrawerWidget({Key? key}) : super(key: key);
@@ -19,64 +21,64 @@ class _DrawerWidgetState extends State<DrawerWidget> {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
-    themeProvider.getDarkTheme ? Colors.white : Colors.black;
+
     return Drawer(
       child: Material(
         color: Theme.of(context).scaffoldBackgroundColor,
         child: ListView(
           children: [
             DrawerHeader(
-                decoration:
-                    BoxDecoration(color: Theme.of(context).primaryColor),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Flexible(
-                        child: Image.asset(
+              decoration: BoxDecoration(color: Theme.of(context).primaryColor),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Flexible(
+                    child: Image.asset(
                       'assets/images/newspaper.png',
-                      // height: 60,
-                      // width: 60,
-                    )),
-                    const VerticalSpace(20),
-                    Flexible(
-                        child: Text(
-                      'News App',
+                      height: 60,
+                      width: 60,
+                    ),
+                  ),
+                  const VerticalSpacing(20),
+                  Flexible(
+                    child: Text(
+                      'News app',
                       style: GoogleFonts.lobster(
                           textStyle: const TextStyle(
                               fontSize: 20, letterSpacing: 0.6)),
-                    ))
-                  ],
-                )),
-            const VerticalSpace(20),
-            ListTileWidget(
-              label: 'Home',
-              fct: () {
-                Navigator.pushReplacement(
-                  context,
-                  PageTransition(
-                    type: PageTransitionType.rightToLeft,
-                    child: const HomeScreen(),
-                    inheritTheme: true,
-                    ctx: context,
+                    ),
                   ),
-                );
-              },
-              icon: IconlyBold.home,
+                ],
+              ),
             ),
-            ListTileWidget(
-              label: 'Bookmark',
+            const VerticalSpacing(20),
+            ListTilesWidget(
+              label: "Home",
+              icon: IconlyBold.home,
               fct: () {
                 Navigator.pushReplacement(
                   context,
                   PageTransition(
-                    type: PageTransitionType.rightToLeft,
-                    child: const BookMarkScreen(),
-                    inheritTheme: true,
-                    ctx: context,
-                  ),
+                      type: PageTransitionType.rightToLeft,
+                      child: const HomeScreen(),
+                      inheritTheme: true,
+                      ctx: context),
                 );
               },
+            ),
+            ListTilesWidget(
+              label: "Bookmark",
               icon: IconlyBold.bookmark,
+              fct: () {
+                Navigator.pushReplacement(
+                  context,
+                  PageTransition(
+                      type: PageTransitionType.rightToLeft,
+                      child: const BookmarkScreen(),
+                      inheritTheme: true,
+                      ctx: context),
+                );
+              },
             ),
             const Divider(
               thickness: 5,
@@ -97,7 +99,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                   setState(() {
                     themeProvider.setDarkTheme = value;
                   });
-                })
+                }),
           ],
         ),
       ),
@@ -105,8 +107,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
   }
 }
 
-class ListTileWidget extends StatelessWidget {
-  const ListTileWidget({
+class ListTilesWidget extends StatelessWidget {
+  const ListTilesWidget({
     Key? key,
     required this.label,
     required this.fct,
@@ -118,17 +120,17 @@ class ListTileWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(
-        label,
-        style: const TextStyle(fontSize: 20),
-      ),
       leading: Icon(
         icon,
         color: Theme.of(context).colorScheme.secondary,
       ),
-      onTap: (() {
+      title: Text(
+        label,
+        style: const TextStyle(fontSize: 20),
+      ),
+      onTap: () {
         fct();
-      }),
+      },
     );
   }
 }

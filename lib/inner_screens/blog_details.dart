@@ -6,15 +6,15 @@ import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../consts/styles.dart';
-import '../models/bookmark_model.dart';
-import '../provider/bookmark_provider.dart';
-import '../provider/news_provider.dart';
+import '../models/bookmarks_model.dart';
+import '../providers/bookmarks_provider.dart';
+import '../providers/news_provider.dart';
 import '../services/global_methods.dart';
 import '../services/utils.dart';
-import '../widgets/verfical_spaceing.dart';
+import '../widgets/vertical_spacing.dart';
 
 class NewsDetailsScreen extends StatefulWidget {
-  static const routename = "/NewsDetailsScreen";
+  static const routeName = "/NewsDetailsScreen";
   const NewsDetailsScreen({Key? key}) : super(key: key);
 
   @override
@@ -22,33 +22,33 @@ class NewsDetailsScreen extends StatefulWidget {
 }
 
 class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
-  bool isInBookMark = false;
+  bool isInBookmark = false;
   String? publishedAt;
-  dynamic currentBookmark;
+  dynamic currBookmark;
   @override
   void didChangeDependencies() {
     publishedAt = ModalRoute.of(context)!.settings.arguments as String;
-    final List<BookMarkModel> bookmarkList =
-        Provider.of<BookMarkProvider>(context).getBookMarkList;
+    final List<BookmarksModel> bookmarkList =
+        Provider.of<BookmarksProvider>(context).getBookmarkList;
     if (bookmarkList.isEmpty) {
       return;
     }
-    currentBookmark = bookmarkList
+    currBookmark = bookmarkList
         .where((element) => element.publishedAt == publishedAt)
         .toList();
-    if (currentBookmark.isEmpty) {
-      isInBookMark = false;
+    if (currBookmark.isEmpty) {
+      isInBookmark = false;
     } else {
-      isInBookMark = true;
+      isInBookmark = true;
     }
     super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
-    final Color color = Utils(context).getColor;
+    final color = Utils(context).getColor;
     final newsProvider = Provider.of<NewsProvider>(context);
-    final bookMarkProvider = Provider.of<BookMarkProvider>(context);
+    final bookmarksProvider = Provider.of<BookmarksProvider>(context);
 
     final currentNews = newsProvider.findByDate(publishedAt: publishedAt);
     return Scaffold(
@@ -58,11 +58,9 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         centerTitle: true,
         title: Text(
-          'By ${currentNews.authorName}',
+          "By ${currentNews.authorName}",
           textAlign: TextAlign.center,
-          style: TextStyle(
-            color: color,
-          ),
+          style: TextStyle(color: color),
         ),
       ),
       body: ListView(
@@ -77,7 +75,7 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                   textAlign: TextAlign.justify,
                   style: titleTextStyle,
                 ),
-                const VerticalSpace(25),
+                const VerticalSpacing(25),
                 Row(
                   children: [
                     Text(
@@ -91,7 +89,7 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                     ),
                   ],
                 ),
-                const VerticalSpace(20),
+                const VerticalSpacing(20),
               ],
             ),
           ),
@@ -115,7 +113,7 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                 bottom: 0,
                 right: 10,
                 child: Padding(
-                  padding: const EdgeInsets.only(right: 8.0),
+                  padding: const EdgeInsets.only(right: 10),
                   child: Row(
                     children: [
                       GestureDetector(
@@ -143,17 +141,15 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                       ),
                       GestureDetector(
                         onTap: () async {
-                          if (isInBookMark) {
-                            await bookMarkProvider.deleteBookmark(
-                                key: currentBookmark[0].bookmarkKey);
+                          if (isInBookmark) {
+                            await bookmarksProvider.deleteBookmark(
+                                key: currBookmark[0].bookmarkKey);
                           } else {
-                            await bookMarkProvider.addToBookmark(
-                                newsModel: currentNews);
+                            await bookmarksProvider.addToBookmark(
+                              newsModel: currentNews,
+                            );
                           }
-                          await bookMarkProvider.fatchBookmarks();
-                          // await bookMarkProvider.addToBookmark(
-                          //     newsModel: currentNews);
-                          // await bookMarkProvider.addToBookMark();
+                          await bookmarksProvider.fetchBookmarks();
                         },
                         child: Card(
                           elevation: 10,
@@ -161,11 +157,11 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Icon(
-                              isInBookMark
+                              isInBookmark
                                   ? IconlyBold.bookmark
                                   : IconlyLight.bookmark,
                               size: 28,
-                              color: isInBookMark ? Colors.green : color,
+                              color: isInBookmark ? Colors.green : color,
                             ),
                           ),
                         ),
@@ -176,7 +172,7 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
               )
             ],
           ),
-          const VerticalSpace(20),
+          const VerticalSpacing(20),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
             child: Column(
@@ -184,30 +180,34 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
               children: [
                 const TextContent(
                   label: 'Description',
-                  fontsize: 20,
+                  fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
-                const VerticalSpace(10),
+                const VerticalSpacing(10),
                 TextContent(
                   label: currentNews.description,
-                  fontsize: 18,
+                  fontSize: 18,
                   fontWeight: FontWeight.normal,
                 ),
-                const VerticalSpace(20),
+                const VerticalSpacing(
+                  20,
+                ),
                 const TextContent(
                   label: 'Contents',
-                  fontsize: 20,
+                  fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
-                const VerticalSpace(10),
+                const VerticalSpacing(
+                  10,
+                ),
                 TextContent(
                   label: currentNews.content,
-                  fontsize: 18,
+                  fontSize: 18,
                   fontWeight: FontWeight.normal,
                 ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );
@@ -218,17 +218,19 @@ class TextContent extends StatelessWidget {
   const TextContent({
     Key? key,
     required this.label,
-    required this.fontsize,
+    required this.fontSize,
     required this.fontWeight,
   }) : super(key: key);
-  final String label;
-  final double fontsize;
-  final FontWeight fontWeight;
 
+  final String label;
+  final double fontSize;
+  final FontWeight fontWeight;
   @override
   Widget build(BuildContext context) {
-    return SelectableText(label,
-        textAlign: TextAlign.justify,
-        style: GoogleFonts.roboto(fontSize: fontsize, fontWeight: fontWeight));
+    return SelectableText(
+      label,
+      textAlign: TextAlign.justify,
+      style: GoogleFonts.roboto(fontSize: fontSize, fontWeight: fontWeight),
+    );
   }
 }
