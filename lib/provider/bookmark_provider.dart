@@ -17,7 +17,7 @@ class BookMarkProvider with ChangeNotifier {
 
   Future<List<BookMarkModel>> fatchBookmarks() async {
     bookMarkList = await NewsApiServices.getBookmarks() ?? [];
-    // notifyListeners();
+    notifyListeners();
     return bookMarkList;
   }
 
@@ -28,6 +28,7 @@ class BookMarkProvider with ChangeNotifier {
           body: json.encode(
             newsModel.toJson(),
           ));
+      notifyListeners();
       log('Response status: ${response.statusCode}');
       log('Response body: ${response.body}');
     } catch (error) {
@@ -35,13 +36,13 @@ class BookMarkProvider with ChangeNotifier {
     }
   }
 
-  Future<void> deleteBookmark() async {
+  Future<void> deleteBookmark({required String key}) async {
     try {
-      var uri =
-          Uri.https(BASEURL_FIREBASE, "bookmarks/-N7bH4DQZAxXdjYTBiIn.json");
+      var uri = Uri.https(BASEURL_FIREBASE, "bookmarks/$key.json");
       var response = await http.delete(
         uri,
       );
+      notifyListeners();
       log('Response status: ${response.statusCode}');
       log('Response body: ${response.body}');
     } catch (error) {
