@@ -1,12 +1,12 @@
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
-import 'package:newsapp/models/bookmark_model.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
 import '../consts/styles.dart';
 import '../inner_screens/blog_details.dart';
 import '../inner_screens/news_details_webview.dart';
+import '../models/bookmark_model.dart';
 import '../models/news_model.dart';
 import '../services/utils.dart';
 import 'verfical_spaceing.dart';

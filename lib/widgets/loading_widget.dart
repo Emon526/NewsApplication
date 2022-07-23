@@ -1,10 +1,11 @@
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
-import 'package:newsapp/provider/bookmark_provider.dart';
+
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../consts/vars.dart';
+import '../provider/bookmark_provider.dart';
 import '../services/utils.dart';
 import 'verfical_spaceing.dart';
 
