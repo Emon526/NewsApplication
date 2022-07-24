@@ -50,124 +50,127 @@ class _SearchScreenState extends State<SearchScreen> {
           FocusScope.of(context).unfocus();
         },
         child: Scaffold(
+            resizeToAvoidBottomInset: false,
             body: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      focusNode.unfocus();
-                      Navigator.pop(context);
-                    },
-                    child: const Icon(
-                      IconlyLight.arrowLeft2,
-                    ),
-                  ),
-                  Flexible(
-                      child: TextField(
-                    focusNode: focusNode,
-                    controller: _searchTextController,
-                    style: TextStyle(color: color),
-                    autofocus: true,
-                    textInputAction: TextInputAction.search,
-                    keyboardType: TextInputType.text,
-                    onEditingComplete: () async {
-                      searchList = await newsProvider.searchNewsProvider(
-                          query: _searchTextController.text);
-                      isSearching = true;
-                      focusNode.unfocus();
-                      setState(() {});
-                    },
-                    decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.only(
-                        bottom: 8 / 5,
-                      ),
-                      hintText: "Search",
-                      enabledBorder: InputBorder.none,
-                      focusedBorder: InputBorder.none,
-                      suffix: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 5),
-                        child: GestureDetector(
-                          onTap: () {
-                            _searchTextController.clear();
-                            focusNode.unfocus();
-                            isSearching = false;
-                            // searchList =[];
-                            searchList!.clear();
-                            setState(() {});
-                          },
-                          child: const Icon(
-                            Icons.close,
-                            size: 18,
-                            color: Colors.red,
-                          ),
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          focusNode.unfocus();
+                          Navigator.pop(context);
+                        },
+                        child: const Icon(
+                          IconlyLight.arrowLeft2,
                         ),
                       ),
-                    ),
-                  ))
-                ],
-              ),
-            ),
-            const VerticalSpacing(10),
-            if (!isSearching && searchList!.isEmpty)
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: MasonryGridView.count(
-                    itemCount: searchKeywords.length,
-                    crossAxisCount: 4,
-                    mainAxisSpacing: 4,
-                    crossAxisSpacing: 4,
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onTap: () async {
+                      Flexible(
+                          child: TextField(
+                        focusNode: focusNode,
+                        controller: _searchTextController,
+                        style: TextStyle(color: color),
+                        autofocus: true,
+                        textInputAction: TextInputAction.search,
+                        keyboardType: TextInputType.text,
+                        onEditingComplete: () async {
                           searchList = await newsProvider.searchNewsProvider(
                               query: _searchTextController.text);
                           isSearching = true;
                           focusNode.unfocus();
-                          _searchTextController.text = searchKeywords[index];
                           setState(() {});
                         },
-                        child: Container(
-                            margin: const EdgeInsets.all(4.0),
-                            decoration: BoxDecoration(
-                                border: Border.all(color: color),
-                                borderRadius: BorderRadius.circular(30)),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Center(
-                                child: FittedBox(
-                                  child: Text(searchKeywords[index]),
-                                ),
+                        decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.only(
+                            bottom: 8 / 5,
+                          ),
+                          hintText: "Search",
+                          enabledBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          suffix: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 5),
+                            child: GestureDetector(
+                              onTap: () {
+                                _searchTextController.clear();
+                                focusNode.unfocus();
+                                isSearching = false;
+                                // searchList =[];
+                                searchList!.clear();
+                                setState(() {});
+                              },
+                              child: const Icon(
+                                Icons.close,
+                                size: 18,
+                                color: Colors.red,
                               ),
-                            )),
-                      );
-                    },
+                            ),
+                          ),
+                        ),
+                      ))
+                    ],
                   ),
                 ),
-              ),
-            if (isSearching && searchList!.isEmpty)
-              const Expanded(
-                child: EmptyNewsWidget(
-                  text: "Ops! No resuls found",
-                  imagePath: 'assets/images/search.png',
-                ),
-              ),
-            if (searchList != null && searchList!.isNotEmpty)
-              Expanded(
-                child: ListView.builder(
-                    itemCount: searchList!.length,
-                    itemBuilder: (ctx, index) {
-                      return ChangeNotifierProvider.value(
-                        value: searchList![index],
-                        child: const ArticlesWidget(),
-                      );
-                    }),
-              ),
-          ],
-        )),
+                const VerticalSpacing(10),
+                if (!isSearching && searchList!.isEmpty)
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: MasonryGridView.count(
+                        itemCount: searchKeywords.length,
+                        crossAxisCount: 4,
+                        mainAxisSpacing: 4,
+                        crossAxisSpacing: 4,
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                            onTap: () async {
+                              searchList =
+                                  await newsProvider.searchNewsProvider(
+                                      query: _searchTextController.text);
+                              isSearching = true;
+                              focusNode.unfocus();
+                              _searchTextController.text =
+                                  searchKeywords[index];
+                              setState(() {});
+                            },
+                            child: Container(
+                                margin: const EdgeInsets.all(4.0),
+                                decoration: BoxDecoration(
+                                    border: Border.all(color: color),
+                                    borderRadius: BorderRadius.circular(30)),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Center(
+                                    child: FittedBox(
+                                      child: Text(searchKeywords[index]),
+                                    ),
+                                  ),
+                                )),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                if (isSearching && searchList!.isEmpty)
+                  const Expanded(
+                    child: EmptyNewsWidget(
+                      text: "Ops! No resuls found",
+                      imagePath: 'assets/images/search.png',
+                    ),
+                  ),
+                if (searchList != null && searchList!.isNotEmpty)
+                  Expanded(
+                    child: ListView.builder(
+                        itemCount: searchList!.length,
+                        itemBuilder: (ctx, index) {
+                          return ChangeNotifierProvider.value(
+                            value: searchList![index],
+                            child: const ArticlesWidget(),
+                          );
+                        }),
+                  ),
+              ],
+            )),
       ),
     );
   }

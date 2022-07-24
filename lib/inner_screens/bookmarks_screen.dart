@@ -43,6 +43,7 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
               future: Provider.of<BookmarksProvider>(context, listen: false)
                   .fetchBookmarks(),
               builder: ((context, snapshot) {
+                // log("Bookmark screen snapshotdata :  ${snapshot.data}");
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const LoadingWidget(newsType: NewsType.allNews);
                 } else if (snapshot.hasError) {
@@ -52,10 +53,12 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
                       imagePath: 'assets/images/no_news.png',
                     ),
                   );
-                } else if (snapshot.data == null) {
-                  return const EmptyNewsWidget(
-                    text: 'You didn\'t add anything yet to your bookmarks',
-                    imagePath: "assets/images/bookmark.png",
+                } else if (snapshot.data!.isEmpty) {
+                  return const Expanded(
+                    child: EmptyNewsWidget(
+                      text: 'You didn\'t add anything yet to your bookmarks',
+                      imagePath: "assets/images/bookmark.png",
+                    ),
                   );
                 }
                 return Expanded(

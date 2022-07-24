@@ -13,7 +13,7 @@ class NewsAPiServices {
       {required int page, required String sortBy}) async {
     try {
       var uri = Uri.https(BASEURL, "v2/everything", {
-        "q": "bitcoin",
+        // "q": "bitcoin",
         "pageSize": "5",
         "domains": "techcrunch.com",
         "page": page.toString(),
@@ -114,17 +114,24 @@ class NewsAPiServices {
       // log('Response status: ${response.statusCode}');
       // log('Response body: ${response.body}');
 
-      Map data = jsonDecode(response.body);
       List allKeys = [];
-
+      Map data = {};
+      if (jsonDecode(response.body) == null) {
+      } else {
+        data = jsonDecode(response.body);
+      }
       if (data['code'] != null) {
+        // log(data['code']);
         throw HttpException(data['code']);
+        // throw HttpException(data['message']);
+
         // throw data['message'];
       }
       for (String key in data.keys) {
         allKeys.add(key);
       }
-      log("allKeys $allKeys");
+      log("All Bookmark Keys :  $allKeys");
+      log("Number of Bookmarks : ${allKeys.length}");
       return BookmarksModel.bookmarksFromSnapshot(json: data, allKeys: allKeys);
     } catch (error) {
       rethrow;

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 
@@ -38,6 +40,9 @@ class _HomeScreenState extends State<HomeScreen> {
     Size size = Utils(context).getScreenSize;
     final Color color = Utils(context).getColor;
     final newsProvider = Provider.of<NewsProvider>(context);
+    // final int totalPage = newsProvider.newsList.length;
+    const int totalPage = 5;
+
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: true,
@@ -133,7 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         Flexible(
                           flex: 2,
                           child: ListView.builder(
-                              itemCount: 5,
+                              itemCount: totalPage,
                               scrollDirection: Axis.horizontal,
                               itemBuilder: ((context, index) {
                                 return Padding(
@@ -151,7 +156,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                       child: Center(
                                           child: Padding(
                                         padding: const EdgeInsets.all(8.0),
-                                        child: Text("${index + 1}"),
+                                        child: Text(
+                                          "${index + 1}",
+                                        ),
                                       )),
                                     ),
                                   ),
@@ -161,7 +168,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         paginationButtons(
                           text: "Next",
                           function: () {
-                            if (currentPageIndex == 4) {
+                            if (currentPageIndex == totalPage - 1) {
                               return;
                             }
                             setState(() {

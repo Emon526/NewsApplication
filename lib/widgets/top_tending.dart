@@ -24,20 +24,23 @@ class TopTrendingWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(12.0),
         child: InkWell(
           onTap: () {
-            Navigator.pushNamed(context, NewsDetailsScreen.routeName, arguments: newsModelProvider.publishedAt);
+            Navigator.pushNamed(context, NewsDetailsScreen.routeName,
+                arguments: newsModelProvider.publishedAt);
           },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             // mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: FancyShimmerImage(
-                  boxFit: BoxFit.fill,
-                  errorWidget: Image.asset('assets/images/empty_image.png'),
-                  imageUrl: newsModelProvider.urlToImage,
-                  height: size.height * 0.33,
-                  width: double.infinity,
+              Flexible(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: FancyShimmerImage(
+                    boxFit: BoxFit.fill,
+                    errorWidget: Image.asset('assets/images/empty_image.png'),
+                    imageUrl: newsModelProvider.urlToImage,
+                    height: size.height * 0.33,
+                    width: double.infinity,
+                  ),
                 ),
               ),
               Padding(

@@ -61,7 +61,7 @@ class _MyAppState extends State<MyApp> {
           Consumer<ThemeProvider>(builder: (context, themeChangeProvider, ch) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
-          title: 'News App - Flutter&API Course',
+          title: 'News App',
           theme: Styles.themeData(themeChangeProvider.getDarkTheme, context),
           home: const HomeScreen(),
           routes: {

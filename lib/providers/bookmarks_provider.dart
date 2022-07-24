@@ -17,6 +17,7 @@ class BookmarksProvider with ChangeNotifier {
 
   Future<List<BookmarksModel>> fetchBookmarks() async {
     bookmarkList = await NewsAPiServices.getBookmarks() ?? [];
+    // log('Working :  $bookmarkList');
     notifyListeners();
     return bookmarkList;
   }

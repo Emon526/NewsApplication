@@ -31,6 +31,7 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
     final List<BookmarksModel> bookmarkList =
         Provider.of<BookmarksProvider>(context).getBookmarkList;
     if (bookmarkList.isEmpty) {
+      isInBookmark = false;
       return;
     }
     currBookmark = bookmarkList
